@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hospital Appointment System</title>
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to Hospital Appointment System</h1>
+      <nav>
+        <ul>
+          <li><a href="/doctors">Doctors</a></li>
+          <li><a href="/patients">Patients</a></li>
+          <li><a href="/appointments">Appointments</a></li>
+          <li><a href="/auth/profile">Profile</a></li>
+          <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <script>
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", async (e) => {
+          e.preventDefault();
+          try {
+            const response = await fetch("/auth/logout");
+            if (response.ok) {
+              window.location.href = "/auth/login";
+            }
+          } catch (error) {
+            alert("Error logging out");
+          }
+        });
+    </script>
+  </body>
+</html>

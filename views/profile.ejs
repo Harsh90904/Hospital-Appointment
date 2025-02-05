@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Profile</h1>
+        <div class="profile-container">
+            <div class="profile-info">
+                <h2>Account Information</h2>
+                <div class="info-group">
+                    <label>Username:</label>
+                    <span id="username"></span>
+                </div>
+                <div class="info-group">
+                    <label>Email:</label>
+                    <span id="email"></span>
+                </div>
+                <div class="info-group">
+                    <label>Role:</label>
+                    <span id="role"></span>
+                </div>
+            </div>
+
+            <div class="password-update">
+                <h2>Update Password</h2>
+                <form id="updatePasswordForm" class="auth-form">
+                    <div class="form-group">
+                        <input type="password" name="currentPassword" placeholder="Current Password" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="newPassword" placeholder="New Password" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="passwordConfirm" placeholder="Confirm New Password" required>
+                    </div>
+                    <button type="submit">Update Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch user profile
+        async function fetchProfile() {
+            try {
+                const response = await fetch('/auth/me');
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('username').textContent = data.data.user.username;
+                    document.getElementById('email').textContent = data.data.user.email;
+                    document.getElementById('role').textContent = data.data.user.role;
+                } else {
+                    window.location.href = '/auth/login';
+                }
+            } catch (error) {
+                alert('Error fetching profile');
+            }
+        }
+
+        // Update password
+        document.getElementById('updatePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const newPassword = formData.get('newPassword');
+            const passwordConfirm = formData.get('passwordConfirm');
+
+            if (newPassword !== passwordConfirm) {
+                return alert('New passwords do not match!');
+            }
+
+            try {
+                const response = await fetch('/auth/update-password', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        currentPassword: formData.get('currentPassword'),
+                        newPassword,
+                        passwordConfirm
+                    })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Password updated successfully!');
+                    e.target.reset();
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert('Error updating password');
+            }
+        });
+
+        // Load profile on page load
+        fetchProfile();
+    </script>
+</body>
+</html> 

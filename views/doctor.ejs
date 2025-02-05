@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctors</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Doctors</h1>
+        
+        <form action="/doctors" method="POST">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="specialization" placeholder="Specialization" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" name="phone" placeholder="Phone" required>
+            </div>
+            <button type="submit">Add Doctor</button>
+        </form>
+
+        <h2>Doctor List</h2>
+        <div class="list-container">
+            <ul>
+                <% doctors.forEach(doctor => { %>
+                    <li>
+                        <%= doctor.name %> - <%= doctor.specialization %>
+                        (<%= doctor.email %>, <%= doctor.phone %>)
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 
